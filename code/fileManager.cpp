@@ -8,6 +8,8 @@
 
 #include "fileManager.h"
 
+extern CLogManager* logFile;
+
 CFile::CFile()
 {
     m_fp = NULL;
@@ -39,7 +41,6 @@ bool CFile::openFile(const char* filename, const char* openmode)
 
     if ((m_fp = fopen(m_filename, openmode)) == NULL)
     {
-        CLogManager *logFile = logFile->getLogObject();
         logFile->WriteLogFile("文件打开失败，文件名为:%s\n", m_filename);
         return false;
     }
