@@ -10,6 +10,7 @@
 
 vector<st_WeatherSiteInfo> vstcode;      // 存放全国气象站点参数的容器
 vector<st_surfdata> vSimulatedata;       // 存放全国气象站点观测到的分钟数据(模拟值)
+extern CLogManager* logFile;
 
 /*******************************************************************************
  * 函数名称: loadSTCode
@@ -27,7 +28,6 @@ bool loadSTCode(const char *iniFilePath)
     char* result = NULL;
 
     vstcode.clear();
-    CLogManager *logFile =  CLogManager::getLogObject();
 
     if (file.openFile(iniFilePath, "r") == false)
     {
@@ -103,7 +103,6 @@ void createSimulateData()
  *******************************************************************************/
 bool saveSimulateDataToFile(const char *surfDateFileName)
 {
-    CLogManager *logFile = CLogManager::getLogObject();
     CFile file;
 
     if (file.openFile(surfDateFileName, "a") == false)
@@ -128,8 +127,6 @@ bool saveSimulateDataToFile(const char *surfDateFileName)
 
 int main(int argc, char *argv[])
 {
-    CLogManager *logFile = CLogManager::getLogObject();
-
     // 将全国所有的气象站点参数加载到vector中
     if (loadSTCode(INIDATAFILE_PATH) == false)
     {
