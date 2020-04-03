@@ -1,6 +1,6 @@
 /*********************************************************************************
  * File Name: fileManager.cpp
- * Description: 文件操作类(文件的打开关闭、读写等)
+ * Description: 文件操作类(文件的打开、关闭、读写等)
  * Author: jinglong
  * Date: 2020年4月1日 15:46
  * History: 
@@ -11,99 +11,51 @@
 CFile::CFile()
 {
     m_fp = NULL;
-    m_bEnBuffer = true;
     memset(m_filename, 0, sizeof(m_filename));
     memset(m_filenametmp, 0, sizeof(m_filenametmp));
 }
 
 CFile::~CFile()
 {
-    FCloseFile();
+    closeFile();
 }
 
 /*************************************************************************
- * 函数名称：IsOpened
- * 函数功能：判断文件是否打开
- * 输入参数：无
- * 输出参数：无
- * 返 回 值：true: 打开/false: 未打开
- *************************************************************************/
-bool CFile::IsOpened()
-{
-    if (m_fp == NULL)
-    {
-        return false;
-    }
-
-    return true;
-}
-
-/*************************************************************************
- * 函数名称：OpenFile
+ * 函数名称：openFile
  * 函数功能：调用库函数open打开文件
- * 输入参数：const char* filename    文件名
- *          const char* openmode    打开文件的方式
- *          bool m_m_bEnBuffer = true       是否启用缓冲区
+ * 输入参数：const char* filename       文件名
+ *           const char* openmode            打开文件的方式
+ *           bool m_m_bEnBuffer = true       是否启用缓冲区
  * 输出参数：无
  * 返 回 值：true: 打开文件成功/false: 打开文件失败
  *************************************************************************/
-bool CFile::FopenFile(const char* filename, const char* openmode, bool bEnBuffer)
+bool CFile::openFile(const char* filename, const char* openmode)
 {
-    FCloseFile();
+    closeFile();
 
     memset(m_filename, 0, sizeof(m_filename));
-    strncpy(m_filename, filename, strlen(filename));
-
-    memset(m_filenametmp, 0, sizeof(m_filenametmp));
-    SNPRINTF(m_filenametmp, sizeof(m_filenametmp), "%s.tmp", m_filename);
+    strncpy(m_filename, filename, sizeof(m_filename) - 1);
+//    snprintf(m_filenametmp, sizeof(m_filename) - 1, "%s", filename);
 
     if ((m_fp = fopen(m_filename, openmode)) == NULL)
     {
-        printf("文件打开失败，文件名为:%s\n", m_filename);
+        CLogManager *logFile = logFile->getLogObject();
+        logFile->WriteLogFile("文件打开失败，文件名为:%s\n", m_filename);
         return false;
     }
 
-    m_bEnBuffer = bEnBuffer;
-
-    return true;
-}
-
-/*************************************************************************
- * 函数名称：CloseAndRemoveFile
- * 函数功能：关闭文件指针并删除文件
- * 输入参数：无
- * 输出参数：无
- * 返 回 值：true: 成功/false: 失败
- *************************************************************************/ 
-bool CFile::CloseAndRemoveFile()
-{
-    if (m_fp == NULL)
-    {
-        return true;
-    }
-
-    fclose(m_fp);
-    m_fp = NULL;
-
-    if (remove(m_filename) != 0)
-    {
-        memset(m_filename, 0, sizeof(m_filename));
-        return false;
-    }
-
-    memset(m_filename, 0, sizeof(m_filename));
     return true;
 }
 
 /*******************************************************************************
- * 函数名称: Fprintf
+ * 函数名称: f_fprintf
  * 函数功能: 调用vfprintf使用参数列表，将可变参数格式化写到指定的输出流
  * 输入参数：const char* fmt    指定输出的格式
  *          ...     可变参数列表
  * 输出参数：无
  * 返 回 值：成功/失败
  *******************************************************************************/ 
-void CFile::Fprintf(const char* fmt, ...)
+void CFile::f_fprintf(const char* fmt, ...)
 {
     if (m_fp == NULL)
     {
@@ -115,15 +67,10 @@ void CFile::Fprintf(const char* fmt, ...)
     va_start(arg, fmt);
     vfprintf(m_fp, fmt, arg);
     va_end(arg);
-
-    if (m_bEnBuffer == false)
-    {
-        fflush(m_fp);
-    }
 }
 
 /*******************************************************************************
- * 函数名称: Fgets
+ * 函数名称: f_fgets
  * 函数功能: 调用fgets从文件中读取一行内容，并依据输入参数删除换行符
  * 输入参数：char* strBuffer        输出缓冲区
  *          bool bDelCRT           是否删除换行符
@@ -131,7 +78,7 @@ void CFile::Fprintf(const char* fmt, ...)
  * 输出参数：无
  * 返 回 值：成功/失败
  *******************************************************************************/ 
-bool CFile::Fgets(char* strBuffer, const int iReadSize, bool bDelCRT)
+bool CFile::f_fgets(char* strBuffer, const int iReadSize, bool bDelCRT)
 {
     if (m_fp == NULL)
     {
@@ -154,14 +101,14 @@ bool CFile::Fgets(char* strBuffer, const int iReadSize, bool bDelCRT)
 }
 
 /*******************************************************************************
- * 函数名称: FReadFile
+ * 函数名称: readFile
  * 函数功能: 调用fread从流中读取数据
  * 输入参数：void *ptr              输出缓冲区
- *          size_t size            读取的内容数量
+ *           size_t size            读取的内容数量
  * 输出参数：无
  * 返 回 值：成功: 读取的内容数量/失败：-1
  *******************************************************************************/ 
-size_t CFile::FReadFile(void *ptr, size_t size)
+size_t CFile::readFile(void *ptr, size_t size)
 {
     if (m_fp == NULL)
     {
@@ -172,14 +119,14 @@ size_t CFile::FReadFile(void *ptr, size_t size)
 }
 
 /*******************************************************************************
- * 函数名称: FWriteFile
+ * 函数名称: writeFile
  * 函数功能: 调用fwrite向流中写入数据
  * 输入参数：void *ptr              缓冲区
- *          size_t size            写入的内容数量
+ *           size_t size            写入的内容数量
  * 输出参数：无
  * 返 回 值：成功: 写入的内容数量/失败：-1
  *******************************************************************************/ 
-size_t CFile::FWriteFile(const void *ptr, size_t size)
+size_t CFile::writeFile(const void *ptr, size_t size)
 {
     if (m_fp == NULL)
     {
@@ -187,23 +134,17 @@ size_t CFile::FWriteFile(const void *ptr, size_t size)
     }
 
     ssize_t writeSize = fwrite(ptr, 1, size, m_fp);
-
-    if (m_bEnBuffer == false)
-    {
-        fflush(m_fp);
-    }
-
     return writeSize;
 }
 
-/**************************************************************************************
- * 函数名称：FCloseFile
- * 函数功能：调用系统库函数fclose关闭打开的文件。如果存在临时的文件，则调用库函数remove删除临时文件
+/*******************************************************************
+ * 函数名称：closeFile
+ * 函数功能：调用系统库函数fclose关闭打开的文件
  * 输入参数：无
  * 输出参数：无
  * 返 回 值：无
- **************************************************************************************/
-void CFile::FCloseFile()
+ *******************************************************************/
+void CFile::closeFile()
 {
     if (m_fp == NULL)
     {
@@ -212,40 +153,13 @@ void CFile::FCloseFile()
     
     fclose(m_fp);
     m_fp = NULL;
-    
-    memset(m_filenametmp, 0, sizeof(m_filenametmp));
-
-    if (strlen(m_filenametmp) != 0)
-    {
-        remove(m_filenametmp);
-    }
-
-    memset(m_filenametmp, 0, sizeof(m_filenametmp));
-}
-
-/***********************************************************************
- * 函数名称：SNPRINTF
- * 函数功能：调用vsnprintf，将可变参数格式化输出到一个字符数组
- * 输入参数：char *str            格式化输出的目的数组
- *          size_t size          可接受的最大字符数
- *          const char *fmt      格式化参数
- * 输出参数：无
- * 返 回 值：无
- ***********************************************************************/
-int SNPRINTF(char *str, size_t size, const char *fmt, ...)
-{
-    va_list arg;
-
-    va_start(arg, fmt);
-    vsnprintf(str, size, fmt, arg);
-    va_end(arg);
 }
 
 /*************************************************************************
  * 函数名称：DeleteRChar
  * 函数功能：删除字符串尾部的特定字符
  * 输入参数：char* in_string    输入字符串
- *          const char in_char 要删除的字符
+ *           const char in_char 要删除的字符
  * 输出参数：无
  * 返 回 值：无
  *************************************************************************/
