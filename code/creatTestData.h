@@ -5,6 +5,7 @@
 #include "fileManager.h"
 
 #define INIDATAFILE_PATH     "./中国气象站点参数.ini"
+#define SURFDATAFILE_PATH    "./surfdate.txt"           // 模拟气象观测分钟数据
 
 // 气象站点数据结构
 // 比如“安徽,58236,滁州,32.21,118.15,33.5”的含义为: 省份名称 站点代码 城市名称 纬度 经度 海拔高度
@@ -32,6 +33,9 @@ struct st_surfdata
     int iVisibility;             // 能见度(0.1m)
 };
 
-bool LoadSTCode(const char *iniFilePath);
+bool loadSTCode(const char *iniFilePath);
+void createSimulateData();
+bool saveSimulateDataToFile(const char *surfDateFileName);
 
 #endif
+
