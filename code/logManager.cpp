@@ -8,6 +8,7 @@
 
 #include "logManager.h"
 
+CLogManager *logFile =  CLogManager::getLogObject();
 CLogManager* CLogManager::m_Object = NULL;
 
 CLogManager::CLogManager()
