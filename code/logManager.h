@@ -26,7 +26,8 @@ private:
     void CloseLogFile();
 
 public:
-    static CLogManager* getLogObject();
+//    static CLogManager* getLogObject();
+    static CLogManager& getLogObject();
     bool WriteLogFile(const char* fmt, ...);
 };
 

@@ -8,7 +8,8 @@
 
 #include "logManager.h"
 
-CLogManager *logFile =  CLogManager::getLogObject();
+//CLogManager *logFile =  CLogManager::getLogObject();
+CLogManager *logFile = &CLogManager::getLogObject();
 CLogManager* CLogManager::m_Object = NULL;
 
 CLogManager::CLogManager()
@@ -108,6 +109,7 @@ void CLogManager::CloseLogFile()
     }
 }
 
+#ifdef NEVER
 /************************************************************************
  * 函数名称：getLogObject
  * 函数功能：获取日志管理类唯一对象（线程不安全）
@@ -123,6 +125,20 @@ CLogManager* CLogManager::getLogObject()
     }
 
     return m_Object;
+}
+#endif /* NEVER */
+
+/************************************************************************
+ * 函数名称：getLogObject
+ * 函数功能：使用局部静态对象实现单例模式
+ * 输入参数：无
+ * 输出参数：无
+ * 返 回 值：日志管理类对象的引用
+ ************************************************************************/
+CLogManager& CLogManager::getLogObject()
+{
+    static CLogManager logObject;
+    return logObject;
 }
 
 
