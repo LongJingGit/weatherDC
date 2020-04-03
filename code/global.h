@@ -6,9 +6,12 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <unistd.h>
 #include <vector>
+#include <time.h>
 #include "logManager.h"
 #include "fileManager.h"
+#include "logManager.h"
 
 using namespace std;
 
@@ -27,5 +30,7 @@ public:
     bool setWeatherSiteInfo(const int iNum, char* in_return);
     bool setWeatherSiteInfo(const int iNum, double* in_return);
 };
+
+struct tm* getLocalDateTime();
 
 #endif

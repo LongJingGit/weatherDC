@@ -21,7 +21,7 @@ CStrOperation::~CStrOperation()
 /*******************************************************************************
  * 函数名称: strSplit
  * 函数功能: 将字符串按照指定格式分割
- * 输入参数: const char* in_string           输入的字符串
+ * 输入参数: const char* in_string              输入的字符串
  *          const char* in_chr              作为标记的分割符
  *          const bool bdeletespace = true  是否删除字符串里的空格（缺省：是）
  * 输出参数: 无
@@ -42,7 +42,7 @@ void CStrOperation::strSplit(const char* in_string, const char* in_chr)
     }
 
 #ifdef NEVER
-    // 利用find和substr重写字符串分割函数
+    // 利用find和substr库函数重写字符串分割函数
     m_vSplitedStr.clear();
     string sourStr = in_string;
     unsigned int u32Pos = 0;
@@ -90,4 +90,21 @@ bool CStrOperation::setWeatherSiteInfo(const int iNum, double* in_return)
     return true;
 }
 
+/************************************************************************
+ * 函数名称：getLocalDateTime
+ * 函数功能：获取当前操作系统的时间
+ * 输入参数：无
+ * 输出参数：无
+ * 返 回 值：struct tm *stDateTime      当前时间
+ ************************************************************************/
+struct tm* getLocalDateTime()
+{
+    time_t rawtime;
+    struct tm *stDateTime;
+    
+    time(&rawtime);
+    stDateTime = localtime(&rawtime);
+
+    return stDateTime;
+}
 
