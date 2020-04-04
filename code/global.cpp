@@ -23,7 +23,6 @@ CStrOperation::~CStrOperation()
  * 函数功能: 将字符串按照指定格式分割
  * 输入参数: const char* in_string              输入的字符串
  *          const char* in_chr              作为标记的分割符
- *          const bool bdeletespace = true  是否删除字符串里的空格（缺省：是）
  * 输出参数: 无
  * 返 回 值: 无
  *******************************************************************************/
