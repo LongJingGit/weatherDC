@@ -97,17 +97,23 @@ void createSimulateData()
 /*******************************************************************************
  * 函数名称: saveSimulateDataToFile
  * 函数功能: 将模拟分钟数据存入文件
- * 输入参数: const char *surfDateFileName       观测分钟数据文件名
+ * 输入参数: const char *surfDataFileDir       模拟数据存放目录
  * 输出参数: 无
  * 返 回 值: true: 成功/false: 失败
  *******************************************************************************/
-bool saveSimulateDataToFile(const char *surfDateFileName)
+bool saveSimulateDataToFile(const char *surfDataFileDir)
 {
     CFile file;
+    char strFileName[128] = {'\0'};
+    struct tm *stDateTime;
+    stDateTime = getLocalDateTime();
 
-    if (file.openFile(surfDateFileName, "a") == false)
+    sprintf(strFileName, "%s%04u%02u%02u%2u%02u%02u.txt", surfDataFileDir, stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
+            stDateTime->tm_hour, stDateTime->tm_min, stDateTime->tm_sec);
+
+    if (file.openFile(strFileName, "a") == false)
     {
-        logFile->WriteLogFile("打开气象观测分钟数据文件失败, 文件路径为%s\n", surfDateFileName);
+        logFile->WriteLogFile("打开气象观测分钟数据文件失败, 文件路径为%s\n", strFileName);
         return false;
     }
 
@@ -138,11 +144,15 @@ int main(int argc, char *argv[])
 
     // 生成模拟数据，放到vsurfdata容器中
     createSimulateData();
-
+    
     // 将模拟数据写入到文件中
-    if (false == saveSimulateDataToFile(SURFDATAFILE_PATH))
+    if (false == saveSimulateDataToFile(SURFDATAFILE_DIR))
     {
         logFile->WriteLogFile("生成模拟气象观测分钟数据失败\n");
+    }
+    else 
+    {
+        logFile->WriteLogFile("生成模拟分钟数据成功\n");
     }
 
     return 0;
