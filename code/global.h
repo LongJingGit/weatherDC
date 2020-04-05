@@ -7,6 +7,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include <vector>
 #include <time.h>
 #include "logManager.h"
@@ -32,5 +33,6 @@ public:
 };
 
 struct tm* getLocalDateTime();
+int getFileSize(const char *in_fileName);
 
 #endif

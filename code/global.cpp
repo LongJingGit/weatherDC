@@ -107,3 +107,21 @@ struct tm* getLocalDateTime()
     return stDateTime;
 }
 
+/************************************************************************
+ * 函数名称：getFileSize
+ * 函数功能：返回指定文件的大小
+ * 输入参数：const char *in_fileName       文件名
+ * 输出参数：无
+ * 返 回 值：文件大小(字节数)
+ ************************************************************************/
+int getFileSize(const char *in_fileName)
+{
+    struct stat st_filestat;
+    if (-1 == stat(in_fileName, &st_filestat))
+    {
+        return -1;
+    }
+
+    return st_filestat.st_size;
+}
+
