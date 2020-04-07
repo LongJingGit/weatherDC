@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+  <FtpConfig>
+    <ip>192.168.198.139</ip><!--远程FTP服务器的IP地址-->
+    <port>21</port><!--FTP端口号-->
+    <mode>pasv</mode><!--传输模式(pasv和port两种)-->
+    <username>jinglong</username><!--用户名-->
+    <passwd>1</passwd><!--密码-->
+  </FtpConfig>
+</Config>
