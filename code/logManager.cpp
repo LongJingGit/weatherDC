@@ -86,7 +86,12 @@ bool CLogManager::WriteLogFile(const char * fmt, ...)
             stDateTime->tm_hour, stDateTime->tm_min, stDateTime->tm_sec);
 
         vfprintf(m_pLogFile, fmt, arg);
-        vfprintf(stdout, fmt, arg);
+
+        // 同时输出到标准错误
+        fprintf(stdout, "%04u-%02u-%02u %2u:%02u:%02u", stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
+            stDateTime->tm_hour, stDateTime->tm_min, stDateTime->tm_sec);
+
+        fprintf(stdout, "%s", fmt);
     }
 
     va_end(arg);
