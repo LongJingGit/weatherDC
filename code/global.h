@@ -7,12 +7,14 @@
 #include <stdarg.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/stat.h>
 #include <vector>
 #include <time.h>
 #include "logManager.h"
 #include "fileManager.h"
 #include "logManager.h"
+#include "configManager.h"
 
 using namespace std;
 
