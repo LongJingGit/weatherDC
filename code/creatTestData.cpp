@@ -133,10 +133,39 @@ bool saveSimulateDataToFile(const char *surfDataFileDir)
 
 int main(int argc, char *argv[])
 {
-    // 将全国所有的气象站点参数加载到vector中
-    if (loadSTCode(INIDATAFILE_PATH) == false)
+    string strIniFilePath;              // 中国气象站点参数文件路径
+    string strGeneFilePath;             // 生成的数据文件存放路径
+    CXMLConfigManager config("config.xml");
+
+    // 读取配置信息
+    if (!config.getValue("Config/createData/inifilepath", strIniFilePath))
     {
-        logFile->WriteLogFile("加载气象站点参数文件失败，文件路径为%s\n", INIDATAFILE_PATH);
+        logFile->WriteLogFile("failed to load parameter inifilepath from config file\n");
+        return -1;
+    }
+
+    if (access(strIniFilePath.c_str(), F_OK) != 0)
+    {
+        logFile->WriteLogFile("文件不存在，文件路径为%s\n", strIniFilePath.c_str());
+        return -1;
+    }
+
+    if (!config.getValue("Config/createData/generatefilepath", strGeneFilePath))
+    {
+        logFile->WriteLogFile("failed to load parameter generatefilepath from config file\n");
+        return -1;
+    }
+
+    if(access(strGeneFilePath.c_str(), F_OK) != 0)
+    {
+        logFile->WriteLogFile("文件不存在，文件路径为%s\n", strIniFilePath.c_str());
+        return -1;
+    }
+
+    // 将全国所有的气象站点参数加载到vector中
+    if (loadSTCode(strIniFilePath.c_str()) == false)
+    {
+        logFile->WriteLogFile("加载气象站点参数文件失败，文件路径为%s\n", strIniFilePath.c_str());
         return -1;
     }
 
@@ -146,7 +175,7 @@ int main(int argc, char *argv[])
     createSimulateData();
     
     // 将模拟数据写入到文件中
-    if (false == saveSimulateDataToFile(SURFDATAFILE_DIR))
+    if (false == saveSimulateDataToFile(strGeneFilePath.c_str()))
     {
         logFile->WriteLogFile("生成模拟气象观测分钟数据失败\n");
     }

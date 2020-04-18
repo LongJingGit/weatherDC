@@ -4,9 +4,6 @@
 #include "global.h"
 #include "fileManager.h"
 
-#define INIDATAFILE_PATH     "./中国气象站点参数.ini"
-#define SURFDATAFILE_DIR    "./"           // 生成的模拟分钟数据文件存放目录
-
 // 气象站点数据结构
 // 比如“安徽,58236,滁州,32.21,118.15,33.5”的含义为: 省份名称 站点代码 城市名称 纬度 经度 海拔高度
 struct st_WeatherSiteInfo
