@@ -67,6 +67,7 @@ bool CLogManager::BackupLogFile()
  ************************************************************************/
 bool CLogManager::WriteLogFile(const char * fmt, ...)
 {
+    char logBuf[2048] = {'\0'};
     va_list arg;
     va_start(arg, fmt);
 
@@ -82,16 +83,16 @@ bool CLogManager::WriteLogFile(const char * fmt, ...)
     }
     else 
     {
-        fprintf(m_pLogFile, "%04u-%02u-%02u %02u:%02u:%02u", stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
+        vsprintf(logBuf, fmt, arg);
+
+        fprintf(m_pLogFile, "%04u-%02u-%02u %02u:%02u:%02u ", stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
             stDateTime->tm_hour, stDateTime->tm_min, stDateTime->tm_sec);
+        fprintf(m_pLogFile, "%s", logBuf);
 
-        vfprintf(m_pLogFile, fmt, arg);
-
-        // 同时输出到标准错误
-        fprintf(stdout, "%04u-%02u-%02u %2u:%02u:%02u", stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
+        // 同时输出到标准输出
+        fprintf(stdout, "%04u-%02u-%02u %2u:%02u:%02u ", stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
             stDateTime->tm_hour, stDateTime->tm_min, stDateTime->tm_sec);
-
-        fprintf(stdout, "%s", fmt);
+        fprintf(stdout, "%s", logBuf);
     }
 
     va_end(arg);
