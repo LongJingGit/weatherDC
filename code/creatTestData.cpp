@@ -104,11 +104,15 @@ void createSimulateData()
 bool saveSimulateDataToFile(const char *surfDataFileDir)
 {
     CFile file;
+    char strNewFileName[128] = {'\0'};
     char strFileName[128] = {'\0'};
     struct tm *stDateTime;
     stDateTime = getLocalDateTime();
 
-    sprintf(strFileName, "%s%04u%02u%02u%2u%02u%02u.txt", surfDataFileDir, stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
+    sprintf(strFileName, "%s%04u%02u%02u%2u%02u%02u.txt.tmp", surfDataFileDir, stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
+            stDateTime->tm_hour, stDateTime->tm_min, stDateTime->tm_sec);
+
+    sprintf(strNewFileName, "%s%04u%02u%02u%2u%02u%02u.txt", surfDataFileDir, stDateTime->tm_year + 1900, stDateTime->tm_mon, stDateTime->tm_mday, 
             stDateTime->tm_hour, stDateTime->tm_min, stDateTime->tm_sec);
 
     if (file.openFile(strFileName, "a") == false)
@@ -127,7 +131,13 @@ bool saveSimulateDataToFile(const char *surfDataFileDir)
     vSimulatedata.clear();
     vstcode.clear();
     file.closeFile();
-    
+
+    if (rename(strFileName, strNewFileName) != 0)
+    {
+        logFile->WriteLogFile("rename file name error!!!\n");
+        return false;
+    }
+
     return true;
 }
 
