@@ -144,9 +144,10 @@ bool CXMLConfigManager::getValue(char * node, string& strValue)
     str.strSplit(node, "/");
     vector<string> vSplitStr(str.m_vSplitedStr);
 
-    if (!xmlStrcmp(pRoot->name, (const xmlChar *)vSplitStr[0].c_str()))
+    if (xmlStrcmp(pRoot->name, (const xmlChar *)vSplitStr[0].c_str()))
     {
-        fprintf(stdout, "root node name is %s\n", pRoot->name);
+        fprintf(stderr, "error, root config file node name is %s, input node name is %s\n", pRoot->name, vSplitStr[0].c_str());
+        return false;
     }
 
     pChildNode = pRoot->xmlChildrenNode;

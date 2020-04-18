@@ -18,7 +18,7 @@ public:
 
 public:
     bool getValue();
-    bool getValue(char * node, string& strValue);
+    bool getValue(char * node, std::string& strValue);
     bool getAttribute();
     bool init();
 };
