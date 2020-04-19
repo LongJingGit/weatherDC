@@ -171,7 +171,7 @@ void DeleteRChar(char* in_string, const char in_char)
         return ;
     }
 
-    int iStrLen = sizeof(in_string);
+    int iStrLen = strlen(in_string);
 
     while(iStrLen > 0)
     {
