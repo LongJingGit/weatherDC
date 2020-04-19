@@ -89,6 +89,83 @@ bool CStrOperation::setWeatherSiteInfo(const int iNum, double* in_return)
     return true;
 }
 
+CDirOperation::CDirOperation()
+{
+    m_pdir = NULL;
+}
+
+CDirOperation::~CDirOperation()
+{
+
+}
+
+/*******************************************************************************
+ * 函数名称: OpenDir
+ * 函数功能: 打开对应目录
+ * 输入参数: string strDirName      需要打开的目录名
+ * 输出参数: 无
+ * 返 回 值: 0: 成功/-1: 失败
+ *******************************************************************************/
+int CDirOperation::OpenDir(string strDirName)
+{
+    if (m_pdir != NULL)
+    {
+        return -1;
+    }
+
+    if ((m_pdir = opendir(strDirName.c_str())) == NULL)
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
+/*******************************************************************************
+ * 函数名称: ReadDir
+ * 函数功能: 读取目录中的所有文件，并将文件名保存到vector<string>中
+ * 输入参数: vector < string >& m_vFileName         目录下的所有文件名
+ * 输出参数: 无
+ * 返 回 值: 0: 成功/-1: 失败
+ *******************************************************************************/
+int CDirOperation::ReadDir(vector < string >& m_vFileName)
+{
+    if (m_pdir == NULL)
+    {
+        return -1;
+    }
+
+    struct dirent *entry;
+    while (entry = readdir(m_pdir))
+    {
+        // 只保存文件，不保存目录
+        if (entry->d_type == 8)
+        {
+            m_vFileName.push_back(entry->d_name);
+        }
+    }
+
+    return 0;
+}
+
+/*******************************************************************************
+ * 函数名称: CloseDir
+ * 函数功能: 关闭目录
+ * 输入参数: 无
+ * 输出参数: 无
+ * 返 回 值: 0: 成功/-1: 失败
+ *******************************************************************************/
+int CDirOperation::CloseDir()
+{
+    if (m_pdir == NULL)
+    {
+        return -1;
+    }
+
+    closedir(m_pdir);
+    return 0;
+}
+
 /************************************************************************
  * 函数名称：getLocalDateTime
  * 函数功能：获取当前操作系统的时间

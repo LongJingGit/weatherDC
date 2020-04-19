@@ -11,6 +11,8 @@
 #include <sys/stat.h>
 #include <vector>
 #include <time.h>
+#include <dirent.h>
+#include <algorithm>
 #include "logManager.h"
 #include "fileManager.h"
 #include "logManager.h"
@@ -32,6 +34,22 @@ public:
     void strSplit(const char* in_string, const char* in_seq);
     bool setWeatherSiteInfo(const int iNum, char* in_return);
     bool setWeatherSiteInfo(const int iNum, double* in_return);
+};
+
+// 目录操作类
+class CDirOperation
+{
+public:
+    CDirOperation();
+    ~CDirOperation();
+
+private:
+    DIR *m_pdir;            // 目录结构指针
+
+public:
+    int OpenDir(string strDirName);
+    int ReadDir(vector<string>& m_vFileName);
+    int CloseDir();
 };
 
 struct tm* getLocalDateTime();
