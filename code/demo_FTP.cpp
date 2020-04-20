@@ -1,6 +1,6 @@
 /*********************************************************************************
  * File Name: demo_FTP
- * Description: 测试ftp操作管理类的各项功能
+ * Description: FTP封装库(qftp)测试demo
  * Author: jinglong
  * Date: 2020年4月6日 10:22
  * History: 
