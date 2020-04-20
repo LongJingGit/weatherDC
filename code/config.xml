@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Config>
-  <FtpConfig>
-    <ip>192.168.198.139</ip><!--远程FTP服务器的IP地址-->
-    <port>21</port><!--FTP端口号-->
+<Config version="1.0">
+  <!--模拟数据生成模块相关配置信息-->
+  <createData>
+    <inifilepath>../ini/中国气象站点参数.ini</inifilepath><!--气象站点参数文件路径-->
+    <generatefilepath>../remotedata/</generatefilepath><!--生成的数据文件保存路径，以“/”结尾-->
+  </createData>
+  
+  <!--FTP相关配置-->
+  <ftpconfig>
+    <ip>192.168.159.133</ip><!--远程FTP服务器的IP地址-->
+    <port>21</port><!--端口号-->
     <mode>pasv</mode><!--传输模式(pasv和port两种)-->
     <username>jinglong</username><!--用户名-->
     <passwd>1</passwd><!--密码-->
-  </FtpConfig>
+    <remotefilepath>/mnt/hgfs/gitSpace/weatherDC/remotedata/</remotefilepath><!--服务器上数据文件存放路径，已“/”结尾-->
+    <filepath>../localdata/</filepath><!--获取到的数据文件的本地保存路径，以“/”结尾-->
+    <timeout>300</timeout><!--超时等待时间：秒-->
+  </ftpconfig>
+  
+  <!--oracle数据库相关配置-->
+  <oracleConfig>
+    <username>scott</username><!--用户名-->
+    <userpwd>tiger</userpwd><!--密码-->
+    <tnsname>orcl</tnsname><!--服务名-->
+  </oracleConfig>
 </Config>
