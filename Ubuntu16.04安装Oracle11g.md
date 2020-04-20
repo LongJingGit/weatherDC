@@ -23,7 +23,7 @@ set autoindent
 * 设置系统为中文显示
 * 重启系统`init 6`
 * 点击“不要再次询问我”，“保留旧的名称”
-![](./png/1.png)
+![](png/1.png)
 * 安装`alien`
 ```
 # sudo apt-get install alien
@@ -39,7 +39,7 @@ export JRE_HOME=${JAVA_HOME}/jre
 export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
 export PATH=${JAVA_HOME}/bin:$PATH
 ```
-![](./png/2.png)
+![](png/2.png)
 * 检查JDK环境
 ```java -version```
 ![](./png/3.png)
