@@ -1,6 +1,6 @@
 /*********************************************************************************
  * File Name: demo_configManager.cpp
- * Description: xml配置文件管理模块测试demo
+ * Description: 配置文件管理模块(configManager)测试demo
  * Author: jinglong
  * Date: 2020年4月6日 22:35
  * History: 
