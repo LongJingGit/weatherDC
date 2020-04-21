@@ -8,7 +8,7 @@
 
 #include "oradbmanager.h"
 
-CORADBManager::CORADBManager()
+CORADBManager::CORADBManager()
 {
     setup();
 }
