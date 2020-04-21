@@ -43,12 +43,23 @@ public:
     CDirOperation();
     ~CDirOperation();
 
+public:
+    vector<string> m_vFileName;         // 目录下的所有文件名
+
 private:
-    DIR *m_pdir;            // 目录结构指针
+    DIR *m_pdir;                     // 目录结构指针
+    char m_dirName[512];             // 文件所在目录名
+    char m_fileName[128];            // 文件名（不包含目录名）
+    char m_fullFileName[512];        // 文件名（包含目录名）
+    char m_modifyTime[128];          // 文件最后被修改时间
+    char m_createTime[128];          // 文件被创建的时间
+    char m_accessTime[128];          // 文件最后被访问的时间
+    int m_fileSize;                  // 文件大小
 
 public:
-    int OpenDir(string strDirName);
-    int ReadDir(vector<string>& m_vFileName);
+    void initdata();
+    int OpenDir(const char *strDirName);
+    int ReadDir();
     int CloseDir();
 };
 

@@ -91,29 +91,46 @@ bool CStrOperation::setWeatherSiteInfo(const int iNum, double* in_return)
 
 CDirOperation::CDirOperation()
 {
-    m_pdir = NULL;
+    initdata();
 }
 
 CDirOperation::~CDirOperation()
 {
+    if (m_pdir != NULL)
+    {
+        CloseDir();
+    }
+}
 
+// 初始化
+void CDirOperation::initdata()
+{
+    m_pdir = NULL;
+    m_vFileName.clear();
+    memset(m_dirName, 0, sizeof(m_dirName));
+    memset(m_fileName, 0, sizeof(m_fileName));
+    memset(m_fullFileName, 0, sizeof(m_fullFileName));
+    memset(m_modifyTime, 0, sizeof(m_modifyTime));
+    memset(m_createTime, 0, sizeof(m_createTime));
+    memset(m_accessTime, 0, sizeof(m_accessTime));
+    m_fileSize = 0;
 }
 
 /*******************************************************************************
  * 函数名称: OpenDir
- * 函数功能: 打开对应目录
- * 输入参数: string strDirName      需要打开的目录名
+ * 函数功能: 打开对应目录，并将结果保存在vector<string>中
+ * 输入参数: const char * strDirName                要打开的目录名
  * 输出参数: 无
  * 返 回 值: 0: 成功/-1: 失败
  *******************************************************************************/
-int CDirOperation::OpenDir(string strDirName)
+int CDirOperation::OpenDir(const char * strDirName)
 {
     if (m_pdir != NULL)
     {
         return -1;
     }
 
-    if ((m_pdir = opendir(strDirName.c_str())) == NULL)
+    if ((m_pdir = opendir(strDirName)) == NULL)
     {
         return -1;
     }
@@ -124,11 +141,11 @@ int CDirOperation::OpenDir(string strDirName)
 /*******************************************************************************
  * 函数名称: ReadDir
  * 函数功能: 读取目录中的所有文件，并将文件名保存到vector<string>中
- * 输入参数: vector < string >& m_vFileName         目录下的所有文件名
+ * 输入参数: 无
  * 输出参数: 无
  * 返 回 值: 0: 成功/-1: 失败
  *******************************************************************************/
-int CDirOperation::ReadDir(vector < string >& m_vFileName)
+int CDirOperation::ReadDir()
 {
     if (m_pdir == NULL)
     {
@@ -163,6 +180,7 @@ int CDirOperation::CloseDir()
     }
 
     closedir(m_pdir);
+    m_pdir = NULL;
     return 0;
 }
 
