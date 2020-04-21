@@ -160,16 +160,17 @@ int readLoadedFileList(vector<string> &vLoadedFileList)
 {
     CDirOperation dir;
 
-    if (dir.OpenDir(strLocalPath) != 0)
+    if (dir.OpenDir(strLocalPath.c_str()) != 0)
     {
         return -1;
     }
     
-    if (dir.ReadDir(vLoadedFileList) != 0)
+    if (dir.ReadDir() != 0)
     {
         return -1;
     }
 
+    vLoadedFileList.assign(dir.m_vFileName.begin(), dir.m_vFileName.end());
     return 0;
 }
 
