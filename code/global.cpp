@@ -89,6 +89,17 @@ bool CStrOperation::setWeatherSiteInfo(const int iNum, double* in_return)
     return true;
 }
 
+bool CStrOperation::setWeatherSiteInfo(const int iNum, int* in_return)
+{
+    if (iNum >= m_vSplitedStr.size())
+    {
+        return false;
+    }
+
+    *in_return = atoi(m_vSplitedStr[iNum].c_str());
+    return true;
+}
+
 CDirOperation::CDirOperation()
 {
     initdata();

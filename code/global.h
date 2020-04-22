@@ -34,6 +34,7 @@ public:
     void strSplit(const char* in_string, const char* in_seq);
     bool setWeatherSiteInfo(const int iNum, char* in_return);
     bool setWeatherSiteInfo(const int iNum, double* in_return);
+    bool setWeatherSiteInfo(const int iNum, int* in_return);
 };
 
 // 目录操作类
