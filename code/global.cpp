@@ -77,8 +77,7 @@ bool CStrOperation::setWeatherSiteInfo(const int iNum, char* in_return)
     return true;
 }
 
-// 重载setWeatherSiteInfo(const int iNum, char* in_return)
-bool CStrOperation::setWeatherSiteInfo(const int iNum, double* in_return)
+bool CStrOperation::setWeatherSiteInfo(const int iNum, int* in_return)
 {
     if (iNum >= m_vSplitedStr.size())
     {
@@ -89,14 +88,36 @@ bool CStrOperation::setWeatherSiteInfo(const int iNum, double* in_return)
     return true;
 }
 
-bool CStrOperation::setWeatherSiteInfo(const int iNum, int* in_return)
+bool CStrOperation::setWeatherSiteInfo(const int iNum, long* in_return)
 {
     if (iNum >= m_vSplitedStr.size())
     {
         return false;
     }
 
-    *in_return = atoi(m_vSplitedStr[iNum].c_str());
+    *in_return = atol(m_vSplitedStr[iNum].c_str());
+    return true;
+}
+
+bool CStrOperation::setWeatherSiteInfo(const int iNum, float* in_return)
+{
+    if (iNum >= m_vSplitedStr.size())
+    {
+        return false;
+    }
+
+    *in_return = (float)atoi(m_vSplitedStr[iNum].c_str());
+    return true;
+}
+
+bool CStrOperation::setWeatherSiteInfo(const int iNum, double* in_return)
+{
+    if (iNum >= m_vSplitedStr.size())
+    {
+        return false;
+    }
+
+    *in_return = (double)atof(m_vSplitedStr[iNum].c_str());
     return true;
 }
 
