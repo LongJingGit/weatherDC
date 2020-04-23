@@ -144,18 +144,34 @@ int readDataInfo(char *pFileName, vector<st_surfdata> &vSimulatedata)
  * 函数功能: 将vector<st_surfdata>中的数据插入到数据库中
  * 输入参数: CDataSaveTable &savedata
  *           CORADBManager &oracleManager
+ *           CORADBSqlStmt& sql
  *           vector<st_surfdata>& vSimulatedata
  * 输出参数: 无
  * 返 回 值: 0: 成功/-1: 失败
  *******************************************************************************/
-int insertDatatoDB(CDataSaveTable &savedata, CORADBManager &oracleManager, vector<st_surfdata>& vSimulatedata)
+int insertDatatoDB(CDataSaveTable &savedata, CORADBManager &oracleManager, CORADBSqlStmt& sql, vector<st_surfdata>& vSimulatedata)
 {
+    int iErrCode;            // SQL语句执行结果
+
     for (vector<st_surfdata>::iterator it = vSimulatedata.begin(); it != vSimulatedata.end(); it++)
     {
         savedata.m_sDataInfo = (*it);
-        if (savedata.inserttable(oracleManager) != 0)
+        iErrCode = savedata.inserttable(oracleManager, sql);
+
+        // 执行成功
+        if (iErrCode == 0)
         {
-            logFile->WriteLogFile("数据插入失败\n");
+            continue;
+        }
+        // 主键冲突/数据超过允许精度，则插入下一条数据
+        else if (iErrCode == 1 || (iErrCode >= 3113 && iErrCode <= 3115))
+        {
+            logFile->WriteLogFile("数据插入失败，errcode = %d\n", iErrCode);
+            continue;
+        }
+        else
+        {
+            logFile->WriteLogFile("数据插入失败, errcode = %d\n", iErrCode);
             return -1;
         }
     }
@@ -174,6 +190,7 @@ int main(int argc, char * argv [ ])
     }
 
     CORADBManager oracleManager;
+    CORADBSqlStmt sql;
     CDataSaveTable savedata;
 
     char pfilename[256];
@@ -201,6 +218,8 @@ int main(int argc, char * argv [ ])
 
     for (vector<string>::iterator it = vFileList.begin(); it != vFileList.end(); it++)
     {
+        logFile->WriteLogFile("正在存储文件(%s)的数据\n", (*it).c_str());
+
         sprintf(pfilename, "%s%s", strFilePath.c_str(), (*it).c_str());
         if (readDataInfo(pfilename, vSimulatedata) != 0)
         {
@@ -208,11 +227,14 @@ int main(int argc, char * argv [ ])
             continue;
         }
         
-        if (insertDatatoDB(savedata, oracleManager, vSimulatedata) != 0)
+        if (insertDatatoDB(savedata, oracleManager, sql, vSimulatedata) != 0)
         {
             logFile->WriteLogFile("插入数据出错\n");
             return -1;
         }
+
+        // 插入一个文件的数据，执行一次提交
+        sql.commit();
     }
 
     return 0;
