@@ -51,7 +51,6 @@ int CDataSaveTable::getConnection(char * sqlbuf, CORADBManager & oracleManager, 
     return 0;
 }
 
-// 插入数据
 /*数据库表结构
 create table weatherdc
 (
@@ -67,12 +66,17 @@ create table weatherdc
     primary key (cObtid, cDatatime)
 );
 */
-int CDataSaveTable::inserttable(CORADBManager &oracleManager)
+/*************************************************************************
+ * 函数名称：inserttable
+ * 函数功能：执行数据插入
+ * 输入参数：CORADBManager &oracleManager          oracle数据库管理类
+ * 输出参数：无
+ * 返 回 值：SQL语句执行结果
+ *************************************************************************/
+int CDataSaveTable::inserttable(CORADBManager &oracleManager, CORADBSqlStmt& sql)
 {
-    char sqlbuf[2048] = {"insert into weatherdc(cObtid, cDatatime, iTemperature, iAirp, ihumidity, iWindDirec, iWindSpeed, iRainFall, iVisibility) \ 
+     char sqlbuf[2048] = {"insert into weatherdc(cObtid, cDatatime, iTemperature, iAirp, ihumidity, iWindDirec, iWindSpeed, iRainFall, iVisibility) \ 
         values(:1, to_date(:2, 'yyyy-mm-dd hh24:mi:ss'), :3, :4, :5, :6, :7, :8, :9)"};
-
-    CORADBSqlStmt sql;
 
     if (getConnection(sqlbuf, oracleManager, sql) != 0)
     {
@@ -93,21 +97,7 @@ int CDataSaveTable::inserttable(CORADBManager &oracleManager)
         return -1;
     }
 
-    if (sql.execSQL() != 0)
-    {
-        printf("执行SQL语句失败\n");
-        return -1;
-    }
-
-    if (sql.commit() != 0)
-    {
-        printf("提交失败\n");
-        return -1;
-    }
-
-    return 0;
+     return sql.execSQL();
 }
-
-
 
 
