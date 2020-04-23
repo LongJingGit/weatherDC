@@ -8,7 +8,7 @@
   
   <!--FTP相关配置-->
   <ftpconfig>
-    <ip>192.168.159.133</ip><!--远程FTP服务器的IP地址-->
+    <ip>192.168.159.136</ip><!--远程FTP服务器的IP地址-->
     <port>21</port><!--端口号-->
     <mode>pasv</mode><!--传输模式(pasv和port两种)-->
     <username>jinglong</username><!--用户名-->
@@ -18,10 +18,12 @@
     <timeout>300</timeout><!--超时等待时间：秒-->
   </ftpconfig>
   
-  <!--oracle数据库相关配置-->
+  <!--存储模块相关配置-->
   <oracleConfig>
-    <username>scott</username><!--用户名-->
-    <userpwd>tiger</userpwd><!--密码-->
-    <tnsname>orcl</tnsname><!--服务名-->
+    <username>scott</username><!--数据库用户名-->
+    <userpwd>tiger</userpwd><!--数据库密码-->
+    <tnsname>orcl</tnsname><!--数据库服务名-->
+    <encode>UTF-8</encode><!--数据库字符集-->
+    <filepath>../localdata/</filepath><!--数据文件保存目录，以“/”结尾-->
   </oracleConfig>
 </Config>
