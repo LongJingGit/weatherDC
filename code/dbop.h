@@ -30,7 +30,7 @@ private:
 
 public:
     int initDB(char * strUserName, char * strUserPwd, char * strTnsName, CORADBManager &oracleManager);
-    int inserttable(CORADBManager &oracleManager);
+    int inserttable(CORADBManager &oracleManager, CORADBSqlStmt& sql);
     int deletetable(CORADBManager &oracleManager);
     int selecttable(CORADBManager &oracleManager);
     int updatetable(CORADBManager &oracleManager);
