@@ -1,4 +1,8 @@
-project_dir
 code/log.out
-code/surfdate.txt
-code/creaTestData
+code/*.a
+code/listfile.txt
+demo_LibXml
+demo_ocilib
+remotedata
+localdata
+project_dir
