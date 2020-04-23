@@ -337,16 +337,19 @@ int CORADBSqlStmt::prepareSQL(char *sql)
  * 函数功能：执行SQL语句
  * 输入参数：无
  * 输出参数：无
- * 返 回 值：0: 成功/其他: 失败
+ * 返 回 值：成功: 0/失败: OCI语句错误代码
+ * 备   注：OCI语句执行过程中由于各种原因(错误数据/主键冲突)会发生错误，
+ *          该函数需要返回错误代码给客户代码，由客户代码决定处理方案
  *************************************************************************/
 int CORADBSqlStmt::execSQL()
 {
     int oci_ret = OCIStmtExecute(m_handle.svchp, m_handle.smthp, m_handle.errhp, (ub4)1, 0, NULL, NULL, OCI_DEFAULT);
+
     if (oci_ret != OCI_SUCCESS && oci_ret != OCI_SUCCESS_WITH_INFO)
     {
         OCIErrorGet((dvoid *)m_handle.errhp, (ub4)1, (text *)NULL, &m_result.errCode, m_result.errMessage, (ub4)sizeof(m_result.errMessage), (ub4)OCI_HTYPE_ERROR);
         printf("[CORADBSqlStmt::execSQL] execute sql error. errcode: %d. error message: %s\n", m_result.errCode, m_result.errMessage);
-        return -1;
+        return m_result.errCode;
     }
 
     return 0;
